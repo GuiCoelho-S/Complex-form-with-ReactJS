@@ -2,7 +2,8 @@ import { React, Component } from "react";
 
 import FormularioCadastro from "./components/FormularioCadastro/FormularioCadastro";
 import { Container, Typography } from "@material-ui/core";
-
+import { validarCPF, validarSenha } from "./components/models/cadastro";
+import ValidacoesCadastro from "./components/context/validacoesCadastro";
 class App extends Component {
   render() {
     return (
@@ -10,10 +11,20 @@ class App extends Component {
         <Typography variant="h4" align="center" gutterBottom component="h1">
           Formulário Cadastro
         </Typography>
-        <FormularioCadastro />
+
+        <ValidacoesCadastro.Provider
+          value={{ cpf: validarCPF, senha: validarSenha }}>
+             <FormularioCadastro aoEnviar={aoEnviarForm} />
+         
+          </ValidacoesCadastro.Provider>
+        
       </Container>
     );
   }
+}
+
+function aoEnviarForm(dados) {
+  console.log(dados);
 }
 
 export default App;

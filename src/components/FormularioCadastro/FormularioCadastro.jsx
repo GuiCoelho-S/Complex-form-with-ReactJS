@@ -1,37 +1,51 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import DadosEntrega from "./DadosEntrega";
 import DadosPessoais from "./DadosPessoais";
 import DadosUsuario from "./DadosUsuario";
-import { Typography } from "@material-ui/core";
+import { Typography, Stepper, Step, StepLabel } from "@material-ui/core";
 
-function FormularioCadastro() {
+function FormularioCadastro({ aoEnviar }) {
   const [etapaAtual, setEtapaAtual] = useState(0);
-
+  const [dadosColetados, setDados] = useState({});
+  useEffect(() => {
+    if (etapaAtual === formularios.length - 1) {
+      aoEnviar(dadosColetados);
+    }
+  });
   const formularios = [
-    <DadosUsuario aoEnviar={Proximo} />,
-    <DadosPessoais aoEnviar={Proximo} validarCPF={validarCPF} />,
-    <DadosEntrega aoEnviar={aoEnviarForm} />,
-    <Typography>Error, formulário não existente</Typography>,
+    <DadosUsuario aoEnviar={coletarDados} />,
+    <DadosPessoais aoEnviar={coletarDados} />,
+    <DadosEntrega aoEnviar={coletarDados} />,
+    <Typography variant="h5">Obrigado pelo cadastro!</Typography>,
   ];
 
   function Proximo() {
     setEtapaAtual(etapaAtual + 1);
   }
 
-  return <>{formularios[etapaAtual]}</>;
+  function coletarDados(dados) {
+    setDados({ ...dadosColetados, ...dados });
+    Proximo();
+  }
+
+  return (
+    <>
+      <Stepper activeStep={etapaAtual}>
+        <Step>
+          <StepLabel>Login</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Pessoal</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Entrega</StepLabel>
+        </Step>
+        <Step>
+          <StepLabel>Finalização</StepLabel>
+        </Step>
+      </Stepper>
+      {formularios[etapaAtual]}
+    </>
+  );
 }
 export default FormularioCadastro;
-
-
-
-function aoEnviarForm(dados) {
-  console.log(dados);
-}
-
-function validarCPF(cpf) {
-  if (cpf.length !== 11) {
-    return { valido: false, texto: "CPF deve ter 11 dígitos" };
-  } else {
-    return { valido: true, texto: "" };
-  }
-}
