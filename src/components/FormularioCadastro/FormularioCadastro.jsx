@@ -16,7 +16,7 @@ function FormularioCadastro({ aoEnviar }) {
     <DadosUsuario aoEnviar={coletarDados} />,
     <DadosPessoais aoEnviar={coletarDados} />,
     <DadosEntrega aoEnviar={coletarDados} />,
-    <Typography variant="h5">Obrigado pelo cadastro!</Typography>,
+    <Typography variant="h3"><center>Obrigado pelo cadastro!</center></Typography>,
   ];
 
   function Proximo() {
